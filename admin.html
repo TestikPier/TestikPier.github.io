@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protoon — графическая админ-панель v22</title>
+  <meta name="description" content="Protoon Admin Panel: управление переводами, фотографиями, hero-блоками, медиатекой, контактами, темой и предпросмотром сайта.">
+  <meta name="theme-color" content="#07070a">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="admin-page admin-pro admin-studio-v20 admin-clean-v22" id="top" data-no-i18n>
+  <main class="admin-shell admin-pro-shell admin-studio-shell">
+    <aside class="admin-studio-sidebar" aria-label="Навигация админ-панели">
+      <a class="admin-studio-brand" href="index.html?lang=ru" target="_blank" rel="noopener">
+        <span><img src="assets/images/protoon-symbol.webp" alt="Protoon"></span>
+        <strong>Protoon</strong>
+        <em>Admin Panel</em>
+      </a>
+      <nav class="admin-tabs admin-pro-tabs admin-side-tabs">
+        <button class="admin-tab active" data-panel="dashboardPanel" type="button"><b>01</b><span>Пульт управления</span></button>
+        <button class="admin-tab" data-panel="translationsPanel" type="button"><b>02</b><span>Тексты RU / EN / ET</span></button>
+        <button class="admin-tab" data-panel="heroPanel" type="button"><b>03</b><span>Hero-фото</span></button>
+        <button class="admin-tab" data-panel="imagesPanel" type="button"><b>04</b><span>Фото сайта</span></button>
+        <button class="admin-tab" data-panel="mediaPanel" type="button"><b>05</b><span>Медиатека</span></button>
+        <button class="admin-tab" data-panel="settingsPanel" type="button"><b>06</b><span>Контакты и тема</span></button>
+        <button class="admin-tab" data-panel="previewPanel" type="button"><b>07</b><span>Live preview</span></button>
+        <button class="admin-tab" data-panel="helpPanel" type="button"><b>08</b><span>Инструкция</span></button>
+      </nav>
+      <div class="admin-side-footer">
+        <a href="index.html?lang=ru" target="_blank" rel="noopener">RU</a>
+        <a href="index.html?lang=en" target="_blank" rel="noopener">EN</a>
+        <a href="index.html?lang=et" target="_blank" rel="noopener">ET</a>
+      </div>
+    </aside>
+
+    <section class="admin-studio-main">
+      <section class="admin-hero-panel admin-studio-topbar">
+        <div class="admin-hero-panel__content admin-command-hero">
+          <div class="eyebrow">Protoon Admin Panel v22</div>
+          <h1>Графический редактор сайта</h1>
+          <p>Центр управления сайтом: тексты, переводы, фотографии, hero-блоки, контакты, визуальная тема, медиатека и предпросмотр страниц.</p>
+          <div class="admin-hero-panel__quick">
+            <button class="btn btn-light" data-jump="heroPanel" type="button">Редактировать hero</button>
+            <button class="btn btn-light" data-jump="imagesPanel" type="button">Фото сайта</button>
+            <button class="btn btn-light" data-jump="previewPanel" type="button">Предпросмотр</button>
+          </div>
+        </div>
+        <div class="admin-command-card admin-action-stack">
+          <span>Управление</span>
+          <button class="btn btn-red" id="saveAllFast" type="button">Сохранить всё</button>
+          <button class="btn btn-dark" id="exportData" type="button">Экспорт JSON</button>
+          <button class="btn btn-dark" id="importDataBtn" type="button">Импорт JSON</button>
+          <input class="hidden-file" id="importData" type="file" accept="application/json">
+        </div>
+      </section>
+
+      <div class="admin-status" id="adminStatus"></div>
+
+      <section class="admin-panel active" id="dashboardPanel">
+        <div class="admin-dashboard admin-dashboard-v20" id="dashStats"></div>
+        <div class="admin-layout-2 admin-layout-wide-left">
+          <article class="admin-card admin-card-glow admin-hero-manager-card">
+            <div class="admin-card-head">
+              <div>
+                <span class="kicker">Visual manager</span>
+                <h2>Главные фото страниц</h2>
+              </div>
+              <button class="btn btn-red" data-jump="heroPanel" type="button">Открыть редактор</button>
+            </div>
+            <div class="hero-quick-grid" id="heroQuickList"></div>
+          </article>
+          <article class="admin-card admin-inspector-card">
+            <div class="admin-card-head">
+              <div>
+                <span class="kicker">Inspector</span>
+                <h2>Состояние сайта</h2>
+              </div>
+            </div>
+            <div class="admin-checklist">
+              <div><strong>Языки доступны на мобильном</strong><span>RU / EN / ET видны в верхней панели телефона</span></div>
+              <div><strong>Hero без затемнения</strong><span>overlay, shade и brightness отключены</span></div>
+              <div><strong>Фото редактируются по ID</strong><span>можно менять отдельно hero, галерею и логотип</span></div>
+              <div><strong>Экспорт настроек</strong><span>переводы, тема, фото и медиатека уходят в JSON</span></div>
+            </div>
+            <div class="admin-mini-timeline" id="miniTimeline"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="translationsPanel">
+        <div class="admin-card admin-toolbar-card admin-flow-toolbar">
+          <div class="admin-toolbar pro-toolbar">
+            <div class="admin-search"><input id="translationSearch" placeholder="Поиск по текстам сайта"></div>
+            <select id="translationLangFilter">
+              <option value="all">Все языки</option>
+              <option value="ru">Русский</option>
+              <option value="en">English</option>
+              <option value="et">Eesti</option>
+            </select>
+            <button class="btn btn-red" id="saveTranslations" type="button">Сохранить тексты</button>
+            <button class="btn btn-dark" id="resetTranslations" type="button">Сбросить</button>
+          </div>
+          <p class="notice">Редактируются тексты всех страниц, кнопок, форм, SEO-title/description, alt-тексты и подписи. Введите часть фразы — и панель сама отфильтрует нужные строки.</p>
+        </div>
+        <div class="translation-list translation-list-pro" id="translationList"></div>
+      </section>
+
+      <section class="admin-panel" id="heroPanel">
+        <div class="admin-card admin-card-glow admin-toolbar-card">
+          <div class="admin-card-head">
+            <div>
+              <span class="kicker">Hero images</span>
+              <h2>Редактор главных фото</h2>
+            </div>
+            <button class="btn btn-red" id="saveHeroImages" type="button">Сохранить hero-фото</button>
+          </div>
+          <p class="notice">Главные фото работают без затемняющих слоев. Каждое hero-фото имеет отдельный ID, поэтому можно заменить изображение только на нужной странице.</p>
+        </div>
+        <div class="hero-editor-grid" id="heroImageList"></div>
+      </section>
+
+      <section class="admin-panel" id="imagesPanel">
+        <div class="admin-card admin-toolbar-card admin-flow-toolbar">
+          <div class="admin-toolbar pro-toolbar">
+            <div class="admin-search"><input id="imageSearch" placeholder="Поиск по фото, странице, alt"></div>
+            <select id="imageRoleFilter"><option value="all">Все фото</option><option value="hero">Hero</option><option value="photo">Фото/галереи</option><option value="logo">Логотипы</option></select>
+            <select id="imagePageFilter"></select>
+            <button class="btn btn-red" id="saveImages" type="button">Сохранить фото</button>
+            <button class="btn btn-dark" id="resetImages" type="button">Сбросить</button>
+          </div>
+          <p class="notice">Можно вставить путь, внешний URL или загрузить файл в браузер. Для постоянной публикации на сервере положите финальный файл в <b>assets/images</b> и укажите путь.</p>
+        </div>
+        <div class="image-editor-grid image-editor-grid-pro" id="imageList"></div>
+      </section>
+
+      <section class="admin-panel" id="mediaPanel">
+        <div class="admin-layout-2 admin-layout-media">
+          <article class="admin-card admin-upload-zone">
+            <span class="kicker">Media library</span>
+            <h2>Загрузка фото</h2>
+            <p>Загрузите фото, потом примените его к hero или любой карточке. Поддерживается выбор файла и drag & drop.</p>
+            <label class="media-drop" id="mediaDropZone">
+              <input id="mediaUpload" type="file" accept="image/*" multiple>
+              <strong>Перетащите фото сюда</strong>
+              <span>JPG, PNG, WebP. Для быстрой загрузки сайта лучше использовать оптимизированные WebP-файлы.</span>
+            </label>
+            <div class="admin-toolbar"><button class="btn btn-dark danger" id="clearMedia" type="button">Очистить медиатеку</button></div>
+          </article>
+          <article class="admin-card admin-media-browser">
+            <div class="admin-card-head">
+              <div><span class="kicker">Browser</span><h2>Медиатека</h2></div>
+              <div class="admin-search compact"><input id="mediaSearch" placeholder="Поиск фото"></div>
+            </div>
+            <div class="media-library" id="mediaLibrary"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="settingsPanel">
+        <div class="admin-layout-2">
+          <article class="admin-card">
+            <div class="admin-card-head"><div><span class="kicker">Contacts</span><h2>Контакты и ссылки</h2></div><button class="btn btn-red" id="saveSettings" type="button">Сохранить</button></div>
+            <div class="admin-grid two">
+              <div class="admin-field"><label>Телефон</label><input name="phone"></div>
+              <div class="admin-field"><label>Ссылка телефона</label><input name="phoneHref"></div>
+              <div class="admin-field"><label>WhatsApp / Telegram ссылка</label><input name="whatsappHref"></div>
+              <div class="admin-field"><label>E-mail</label><input name="email"></div>
+              <div class="admin-field"><label>E-mail ссылка</label><input name="emailHref"></div>
+              <div class="admin-field"><label>Адрес коротко</label><input name="address"></div>
+              <div class="admin-field wide"><label>Адрес полностью</label><input name="addressFull"></div>
+            </div>
+          </article>
+          <article class="admin-card">
+            <div class="admin-card-head"><div><span class="kicker">Theme</span><h2>Визуальная тема</h2></div><button class="btn btn-red" id="saveTheme" type="button">Сохранить тему</button></div>
+            <div class="theme-preview" id="themePreview"><span></span><strong>Protoon</strong><em>premium glass film studio</em></div>
+            <div class="admin-grid two">
+              <div class="admin-field"><label>Акцентный красный</label><input type="color" name="theme:--red"></div>
+              <div class="admin-field"><label>Темно-красный</label><input type="color" name="theme:--red-dark"></div>
+              <div class="admin-field"><label>Черный фон</label><input type="color" name="theme:--black"></div>
+              <div class="admin-field"><label>Темные карточки</label><input type="color" name="theme:--dark"></div>
+              <div class="admin-field"><label>Светлый фон</label><input type="color" name="theme:--paper"></div>
+              <div class="admin-field"><label>Светлый фон 2</label><input type="color" name="theme:--paper-2"></div>
+              <div class="admin-field"><label>Скругление</label><input name="theme:--radius" placeholder="22px"></div>
+              <div class="admin-field"><label>Максимальная ширина</label><input name="theme:--max" placeholder="1180px"></div>
+            </div>
+            <div class="admin-toolbar"><button class="btn btn-dark" id="resetTheme" type="button">Сбросить тему</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="previewPanel">
+        <div class="admin-card admin-preview-card">
+          <div class="admin-toolbar pro-toolbar preview-toolbar">
+            <select id="previewPage"></select>
+            <select id="previewLang"><option value="ru">Русский</option><option value="en">English</option><option value="et">Eesti</option></select>
+            <div class="preview-size-toggle" aria-label="Размер предпросмотра">
+              <button class="active" data-preview-size="desktop" type="button">Desktop</button>
+              <button data-preview-size="tablet" type="button">Tablet</button>
+              <button data-preview-size="mobile" type="button">Mobile</button>
+            </div>
+            <button class="btn btn-red" id="loadPreview" type="button">Обновить</button>
+            <button class="btn btn-dark" id="openPreview" type="button">Открыть отдельно</button>
+          </div>
+          <div class="preview-device preview-device-desktop" id="previewDevice">
+            <iframe class="preview-frame preview-frame-pro" id="previewFrame" title="Protoon preview"></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="helpPanel">
+        <div class="admin-card help-card">
+          <h2>Как пользоваться</h2>
+          <p><b>1.</b> «Тексты RU/EN/ET» — редактирование всех фраз сайта и SEO-текстов.</p>
+          <p><b>2.</b> «Hero-фото» — отдельное управление главным фото каждой страницы. Затемнение hero полностью отключено.</p>
+          <p><b>3.</b> «Фото сайта» — точечная замена любого изображения по ID: галереи, карточки, логотипы.</p>
+          <p><b>4.</b> «Медиатека» — загрузка фото в браузер и применение к блокам. Для настоящей публикации лучше положить финальные файлы в папку <b>assets/images</b>.</p>
+          <p><b>5.</b> «Экспорт JSON» сохраняет все настройки, «Импорт JSON» переносит их в другой браузер.</p>
+          <p class="notice">Это статический визуальный редактор без серверной базы и логина. Для полноценной CMS с пользователями, ролями и хранением файлов на сервере нужен backend.</p>
+          <button class="btn btn-dark danger" id="clearAll" type="button">Очистить все данные админ-панели</button>
+        </div>
+      </section>
+
+      <footer class="admin-footer">
+        <span>Protoon Admin Panel v22</span>
+        <a href="#top">Наверх ↑</a>
+      </footer>
+    </section>
+  </main>
+  <script src="assets/js/i18n.js" defer></script>
+  <script src="assets/js/admin.js" defer></script>
+</body>
+</html>
