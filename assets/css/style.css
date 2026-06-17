@@ -569,3 +569,15 @@ h1{letter-spacing:-.06em;}
     grid-template-columns:1fr!important;
   }
 }
+
+/* Hero readability overlay */
+.hero > .hero__shade,
+.page-hero > .hero__shade,
+.arch-service-hero > .hero__shade{
+  display:block!important;
+  opacity:1!important;
+  z-index:1!important;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.58) 48%,rgba(0,0,0,.42) 100%),
+    linear-gradient(0deg,rgba(7,7,7,.82) 0%,rgba(7,7,7,.30) 34%,rgba(7,7,7,.10) 100%)!important;
+}
